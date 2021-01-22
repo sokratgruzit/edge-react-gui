@@ -47,7 +47,8 @@ type StateProps = {
   destinationWallet?: GuiWallet,
   guiWallet: GuiWallet,
   subcategoriesList: string[],
-  walletDefaultDenomProps: EdgeDenomination
+  walletDefaultDenomProps: EdgeDenomination,
+  settings: Object
 }
 type DispatchProps = {
   getSubcategories(): void,
@@ -252,16 +253,19 @@ export class TransactionDetailsComponent extends React.Component<Props, State> {
   }
 
   renderExchangeData = () => {
-    const { destinationDenomination, destinationWallet, edgeTransaction, guiWallet, walletDefaultDenomProps, theme } = this.props
+    const { destinationDenomination, destinationWallet, edgeTransaction, guiWallet, walletDefaultDenomProps, theme, settings } = this.props
     const { swapData, spendTargets } = edgeTransaction
     const styles = getStyles(theme)
 
     if (!swapData || !spendTargets || !destinationDenomination) return null
 
+    const payoutMultiplier = UTILS.getMultiplierFromSettings(swapData.payoutCurrencyCode.toUpperCase(),settings) // "ETH", Settings object
+
     const { plugin, isEstimate, orderId, payoutAddress, refundAddress } = swapData
     const sourceAmount = UTILS.convertNativeToDisplay(walletDefaultDenomProps.multiplier)(spendTargets[0].nativeAmount)
     const sourceCurrencyCode = spendTargets[0].currencyCode
-    const destinationAmount = UTILS.convertNativeToDisplay(destinationDenomination.multiplier)(swapData.payoutNativeAmount)
+    // Remove ending 0s
+    const destinationAmount = UTILS.convertNativeToDisplay(payoutMultiplier)(swapData.payoutNativeAmount) //JSON.stringify(lookupTest)
     const destinationCurrencyCode = swapData.payoutCurrencyCode
 
     const createExchangeDataString = (newline: string = '\n') => {
@@ -622,7 +626,8 @@ export const TransactionDetailsScene = connect(
       destinationWallet,
       guiWallet: wallet,
       subcategoriesList,
-      walletDefaultDenomProps
+      walletDefaultDenomProps,
+      settings
     }
   },
   (dispatch: Dispatch): DispatchProps => ({
