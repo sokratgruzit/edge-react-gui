@@ -264,8 +264,8 @@ export class TransactionDetailsComponent extends React.Component<Props, State> {
     const { plugin, isEstimate, orderId, payoutAddress, refundAddress } = swapData
     const sourceAmount = UTILS.convertNativeToDisplay(walletDefaultDenomProps.multiplier)(spendTargets[0].nativeAmount)
     const sourceCurrencyCode = spendTargets[0].currencyCode
-    // Remove ending 0s
-    const destinationAmount = UTILS.convertNativeToDisplay(payoutMultiplier)(swapData.payoutNativeAmount) //JSON.stringify(lookupTest)
+    
+    const destinationAmount = UTILS.convertNativeToDisplay(payoutMultiplier)(swapData.payoutNativeAmount)
     const destinationCurrencyCode = swapData.payoutCurrencyCode
 
     const createExchangeDataString = (newline: string = '\n') => {
