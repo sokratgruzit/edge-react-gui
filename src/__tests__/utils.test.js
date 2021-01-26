@@ -673,8 +673,8 @@ describe('Precision Adjustment Value and max primary currency conversion decimal
       exchangeSecondaryToPrimaryRatio: 32533.217120011082
     }
     const precisionAdjustmentValue = precisionAdjust(btcCurrencyInfo)
-    expect(precisionAdjustmentValue).toBe(1)
-    expect(maxPrimaryCurrencyConversionDecimals(bns.log10(btcDisplayDenominationMultiplier), precisionAdjustmentValue)).toBe(7)
+    expect(precisionAdjustmentValue).toBe(0)
+    expect(maxPrimaryCurrencyConversionDecimals(bns.log10(btcDisplayDenominationMultiplier), precisionAdjustmentValue)).toBe(8)
   })
 
   test('ETH precision adjustment value', function () {
@@ -685,7 +685,7 @@ describe('Precision Adjustment Value and max primary currency conversion decimal
       exchangeSecondaryToPrimaryRatio: 1359.8708229894155
     }
     const precisionAdjustmentValue = precisionAdjust(ethCurrencyInfo)
-    expect(precisionAdjustmentValue).toBe(12)
-    expect(maxPrimaryCurrencyConversionDecimals(bns.log10(ethDisplayDenominationMultiplier), precisionAdjustmentValue)).toBe(6)
+    expect(precisionAdjustmentValue).toBe(11)
+    expect(maxPrimaryCurrencyConversionDecimals(bns.log10(ethDisplayDenominationMultiplier), precisionAdjustmentValue)).toBe(7)
   })
 })

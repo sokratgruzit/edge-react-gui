@@ -320,7 +320,7 @@ export function precisionAdjust(params: PrecisionAdjustParams): number {
 
   if (bns.lt(precisionAdjust, '1')) {
     const fPrecisionAdject = parseFloat(precisionAdjust)
-    let order = 2 + Math.floor(Math.log(fPrecisionAdject) / Math.LN10 - 0.000000001) // because float math sucks like that
+    let order = 3 + Math.floor(Math.log(fPrecisionAdject) / Math.LN10 - 0.000000001) // because float math sucks like that
     order = Math.abs(order)
     if (order > 0) {
       return order
