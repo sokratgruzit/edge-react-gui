@@ -1,5 +1,6 @@
 // @flow
 /* globals describe test expect */
+import { bns } from 'biggystring'
 
 import { sanitizeDecimalAmount } from '../modules/UI/components/FlipInput/FlipInput2.ui.js'
 import {
@@ -17,8 +18,10 @@ import {
   isTooFarAhead,
   isTooFarBehind,
   isValidInput,
+  maxPrimaryCurrencyConversionDecimals,
   mergeTokens,
   MILLISECONDS_PER_DAY,
+  precisionAdjust,
   truncateDecimals
 } from '../util/utils.js'
 
@@ -658,5 +661,31 @@ describe('Sanitize Decimal Amount', function () {
     const input = '123.456.789'
     const expected = '123.45'
     expect(sanitizeDecimalAmount(input, maxEntryDecimals)).toBe(expected)
+  })
+})
+
+describe('Precision Adjustment Value and max primary currency conversion decimals', function () {
+  test('BTC for precision adjustment and max conversion decimal', function () {
+    const btcDisplayDenominationMultiplier = '100000000'
+    const btcCurrencyInfo = {
+      primaryExchangeMultiplier: '100000000',
+      secondaryExchangeMultiplier: '100',
+      exchangeSecondaryToPrimaryRatio: 32533.217120011082
+    }
+    const precisionAdjustmentValue = precisionAdjust(btcCurrencyInfo)
+    expect(precisionAdjustmentValue).toBe(1)
+    expect(maxPrimaryCurrencyConversionDecimals(bns.log10(btcDisplayDenominationMultiplier), precisionAdjustmentValue)).toBe(7)
+  })
+
+  test('ETH precision adjustment value', function () {
+    const ethDisplayDenominationMultiplier = '1000000000000000000'
+    const ethCurrencyInfo = {
+      primaryExchangeMultiplier: '1000000000000000000',
+      secondaryExchangeMultiplier: '100',
+      exchangeSecondaryToPrimaryRatio: 1359.8708229894155
+    }
+    const precisionAdjustmentValue = precisionAdjust(ethCurrencyInfo)
+    expect(precisionAdjustmentValue).toBe(12)
+    expect(maxPrimaryCurrencyConversionDecimals(bns.log10(ethDisplayDenominationMultiplier), precisionAdjustmentValue)).toBe(6)
   })
 })
